@@ -12,9 +12,9 @@
     <div class="row">
         <div class="col-lg-4">
             <app-cars-string-filter
-            [label]="'registration'"
-            [(value)]="registration"
-            [(isEnabled)]="isRegistrationEnabled"
+            [label]="'plates'"
+            [(value)]="plates"
+            [(isEnabled)]="isPlatesEnabled"
             />
         </div>
         <div class="col-lg-4">
@@ -38,7 +38,7 @@
             <h5>Total cars: {{cars.length}}</h5>
         </div>
         <div class="col-lg-8"></div>
-        <div class="col-lg-1"><button type="button" class="btn btn-success">Add</button></div>
+        <div class="col-lg-1"><button type="button" class="btn btn-success" (click)="addCar()">Add</button></div>
         </div>
         <br>
         <div class="row">

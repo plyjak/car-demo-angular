@@ -19,15 +19,15 @@ export class CarsService {
   ){}
 
   getFiltered(
-    registrationFilter?: string,
+    platesFilter?: string,
     minYopFilter?: number,
     maxYouFilter?: number,
     brandFilter?: string,
     modelFilter?: string
   ): Observable<Car[]>{
     let params = new HttpParams();
-    if(registrationFilter !== undefined){
-      params = params.append('registration', registrationFilter);
+    if(platesFilter !== undefined){
+      params = params.append('plates', platesFilter);
     }
     if(minYopFilter !== undefined){
       params = params.append('minYop', minYopFilter);
@@ -74,7 +74,7 @@ export class CarsService {
   }
 
   update(car: Car): Observable<any> {
-    return this._http.put(this._url, car, this._httpOptions)
+    return this._http.put(`${this._url}/${car.id}`, car, this._httpOptions)
       .pipe(
           tap(_ => this.log(`updated Car w/ id=${car.id}`)),
           catchError(this.handleError<any>(`update Car w/ id=${car.id}`))

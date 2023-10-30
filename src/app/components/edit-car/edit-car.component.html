@@ -1,1 +1,214 @@
-<p>edit-car works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <app-loading [isLoading]="isLoading"/>
+            <app-error [isError]="isError"/>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-5">
+            <form #carForm="ngForm" (ngSubmit)="submitForm()">
+
+                <table class="table table-stripped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th><label for="plates">Plates</label></th>
+                            <td><input
+                                id="plates"
+                                name="plates"
+                                type="text"
+                                placeholder="Plates number"
+                                class="form-control"
+                                required
+                                pattern="^[A-Za-z0-9]{6}$"
+                                [(ngModel)]="car.plates"
+                                #plates="ngModel"
+                            /></td>
+                        </tr>
+                        <tr>
+                            <th><label for="yop">Year of production</label></th>
+                            <td>
+                                <select>
+                                    <option *ngFor="let n of numbers" [value]="car.yop">{{n}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="yop">Brand</label></th>
+                            <td><input
+                                id="brand"
+                                name="brand"
+                                type="text"
+                                placeholder="Brand"
+                                class="form-control"
+                                required
+                                [(ngModel)]="car.brand"
+                                #brand="ngModel"
+                            /></td>
+                        </tr>
+                        <tr>
+                            <th><label for="model">model</label></th>
+                            <td><input
+                                id="model"
+                                name="model"
+                                type="text"
+                                placeholder="Model"
+                                class="form-control"
+                                required
+                                [(ngModel)]="car.model"
+                                #model="ngModel"
+                            /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <div class="row">
+                <div class="col-lg-1">
+                    <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+                </div>
+                <div class="col-lg-10"></div>
+                <div class="col-lg-1">
+                    <button type="submit" [disabled]="carForm.invalid" class="btn btn-success" (click)="submitForm()">Save</button>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-lg-5">
+            <div *ngIf="plates.invalid && (plates.dirty || plates.touched)" class="alert alert danger">
+                <div *ngIf="plates.errors?.['required']">
+                    Plate number is required.
+                </div>
+                <div *ngIf="plates.errors?.['pattern']">
+                    Bad pattern (exactly 6 alphanumerical characters required)
+                </div>
+            </div>
+            <div *ngIf="brand.invalid && (brand.dirty || brand.touched)" class="alert alert danger">
+                <div *ngIf="brand.errors?.['required']">
+                    Brand is required.
+                </div>
+            </div>
+            <div *ngIf="model.invalid && (model.dirty || model.touched)" class="alert alert danger">
+                <div *ngIf="model.errors?.['required']">
+                    Model is required.
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+
+<!--
+
+
+    <div *ngIf="brand.invalid && (brand.dirty || brand.touched)" class="alert alert danger">
+        <div *ngIf="brand.errors?.['required']">
+            Brand is required.
+        </div>
+    </div>
+
+    <div *ngIf="model.invalid && (model.dirty || model.touched)" class="alert alert danger">
+        <div *ngIf="model.errors?.['required']">
+            Model is required.
+        </div>
+    </div> -->
+
+
+    <!-- <ng-container *ngIf="!isLoading && !isError">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <div class="container">
+                    <div class="col-lg-6 center">
+                        <form #carForm="ngForm" >
+                            <table class="table table-striped cable-bordered">
+                                <div formControlName="car">
+                                    <tbody>
+                                        <tr>
+                                            <th><label for="registration">Registration</label></th>
+                                            <td><input
+                                                    id="registration"
+                                                    name="registration"
+                                                    type="text"
+                                                    placeholder="Registration"
+                                                    pattern='/^[a-zA-Z0-9]{6}$/'
+                                                    required
+                                                    [(ngModel)]="registration"
+                                            /></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="yop">Year of production</label></th>
+                                            <td><input
+                                                    id="yop"
+                                                    name="yop"
+                                                    type="text"
+                                                    placeholder="Year of production"
+                                                    pattern='/^[12]0[012][0-9]$/'
+                                                    [(ngModel)]="yop"
+                                            /></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="brand">Brand</label></th>
+                                                <td><input
+                                                    id="brand"
+                                                    name="brand"
+                                                    type="text"
+                                                    placeholder="Brand"
+                                                    required
+                                                    [(ngModel)]="brand"
+                                            /></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="model">Model</label></th>
+                                                <td><input
+                                                    id="model"
+                                                    name="model"
+                                                    type="text"
+                                                    placeholder="model"
+                                                    required
+                                                    [(ngModel)]="model"
+                                            /></td>
+                                        </tr>
+                                    </tbody>
+                                </div>
+                            </table>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                    <div class="col-lg-6 center">
+
+                    <div *ngIf="registration.invalid && (registration.dirty || registration.touched)" class="alert alert-danger">
+                        <div *ngIf="registration.errors?.['required']">
+                        Registration is required
+                        </div>
+                        <div *ngIf="registration.errors?.['pattern']">
+                        This is not a valid registration format (6 alphanumeric characters)
+                        </div>
+                    </div>
+
+                    <div *ngIf="yop.invalid && (yop.dirty || yop.touched)" class="alert alert-danger">
+                        <div *ngIf="yop.errors?.['pattern']">
+                        This is not a valid year of production format (e.g., 2000, 2021)
+                        </div>
+                    </div>
+
+                    <div *ngIf="brand.invalid && (brand.dirty || brand.touched)" class="alert alert-danger">
+                        <div *ngIf="brand.errors?.['required']">
+                        Brand is required
+                        </div>
+                    </div>
+
+                    <div *ngIf="model.invalid && (model.dirty || model.touched)" class="alert alert-danger">
+                        <div *ngIf="model.errors?.['required']">
+                        Model is required
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+    </ng-container> -->
+</div>

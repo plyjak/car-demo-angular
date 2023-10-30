@@ -3,6 +3,7 @@ import { Car } from 'src/app/models/Car';
 import { Observable, catchError, throwError } from 'rxjs';
 import { CarsService } from 'src/app/services/cars.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ListModifiedService } from 'src/app/services/list-modified.service';
 
 @Component({
   selector: 'app-details',
@@ -17,6 +18,7 @@ export class DetailsComponent implements OnInit {
   constructor(
     private _carsService: CarsService,
     private _route: ActivatedRoute,
+    private _listModifiedService: ListModifiedService,
     private _router: Router
   ){}
   
@@ -38,31 +40,17 @@ export class DetailsComponent implements OnInit {
     return this._carsService.getById(Number(this._route.snapshot.paramMap.get('id')));
   }
 
-  goBack(deletedCarId?: number){
-    if(deletedCarId === undefined){
+  goBack(){
       this._router.navigate(['/cars']);
-    } else {
-      /*
-       * Not the nicest solution, it's error-prone and invites mischeovious users
-       * to wreak havoc in the car list, but it works for a demo purpose. 
-       * More subtle solution would be to create a service shared between list 
-       * and detailed view and emit-consume ids of deleted cars through it.
-       * Another arguably better (but more demanding from the server point of view)
-       * is to force list component to reload its data from the servet, it can be done
-       * the same way as this solution, send a flag through queryParams. Yet another way
-       * is to implemen two-way data binding between list and detailed view, but this
-       * solution would require much stronger coupling between two components,
-       * they must 'know of each other'. Sending queryParams through router.navigate(...)
-       * is much less demanding from this point of view. Like always - there is really
-       * no perfect fit-for-all solution and every aspect must be concidered while
-       * choosing one.
-       */
-      this._router.navigate(['/cars'], { queryParams: { deletedCarId: deletedCarId } });
-    }
   }
 
-  delete(){
+  deleteAndBack(){
     this._carsService.delete(this.car.id).subscribe();
+    this._listModifiedService.notifyCarDeleted(this.car.id)
     this.goBack();
+  }
+
+  edit(){
+    this._router.navigate([`/cars/edit/${this.car.id}`]);
   }
 }

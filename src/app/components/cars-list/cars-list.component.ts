@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Car } from '../../models/Car';
 import { Router } from '@angular/router';
+import { ListModifiedService } from 'src/app/services/list-modified.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cars-list',
@@ -8,11 +10,41 @@ import { Router } from '@angular/router';
   styleUrls: ['./cars-list.component.css']
 })
 
-export class CarsListComponent{
+export class CarsListComponent implements OnInit, OnDestroy{
   @Input() cars: Car[] = [];
+
+  private _subscriptions = new Subscription();
+
+  private _sortKey = "";
+  private _sortDirection = "asc";
+
   constructor(
-    private _router: Router
+    private _router: Router,
+    private _listModifiedService: ListModifiedService,
   ){}
+
+  ngOnInit(): void {
+    const carAddedSubscription = this._listModifiedService.carAddedSubscription((car) => {
+      this.cars.push(car);
+      this.sortTable(this._sortKey);
+    });
+    const carDeletedSubscription = this._listModifiedService.carDeletedSubscription((id) => {
+      this.cars = this.cars.filter((it) => it.id !== id)
+    })
+    const carModifiedSubscription = this._listModifiedService.carModifiedSubscription((car) => {
+      this.cars = this.cars.filter((it) => it.id !== car.id);
+      this.cars.push(car);
+      this.sortTable(this._sortKey);
+    })
+
+    this._subscriptions.add(carAddedSubscription);
+    this._subscriptions.add(carDeletedSubscription);
+    this._subscriptions.add(carModifiedSubscription);
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   /* 
    * I decided to implement sorting on the user side,
@@ -26,8 +58,8 @@ export class CarsListComponent{
 
   private readonly _sortHelper = 
   {
-    "Registration": {
-      "getter": (car: Car) => car.registration,
+    "Plate number": {
+      "getter": (car: Car) => car.plates,
       "comparator": comparator
     },
     "Brand": {
@@ -42,9 +74,6 @@ export class CarsListComponent{
     "getter": (car: Car) => any;
     "comparator": (lhs: any, rhs: any) => number
   }};
-
-  private _sortKey = "";
-  private _sortDirection = "asc";
 
   sortTable(cName: string) {
     if (this._sortKey === cName) {

@@ -1,15 +1,15 @@
 <div class="container">
-    
-    <app-loading [isLoading]="isLoading"/>
-    <app-error [isError]="isError"/>
-
-    <ng-container *ngIf="!isLoading && !isError">
-        <div class="row">
-            <div class="col-lg-1"><span class="center">
-                <button type="button" class="btn btn-primary" (click)="goBack()">Back</button>
-            </span></div>
-            <div class="col-lg-11"></div>
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <app-loading [isLoading]="isLoading"/>
+            <app-error [isError]="isError"/>
         </div>
+        <div class="col-lg-4"></div>
+    </div>
+    <ng-container *ngIf="!isLoading && !isError">
+        <br>
+        <br>
         <br>
         <div class="row">
             <div class="col-lg-2"></div>
@@ -17,12 +17,12 @@
                 <table class="table table-striped table-bordered">
                     <tbody>
                         <tr>
-                            <th>Registration</th>
-                            <td>{{this.car.registration}}</td>
+                            <th>Plate Number</th>
+                            <td>{{this.car.plates}}</td>
                         </tr>
                         <tr>
                             <th>Year of production</th>
-                            <td>{{this.car.yop ? this.car.yop : '[UNKNOWN]'}}</td>
+                            <td>{{this.car.yop}}</td>
                         </tr>
                         <tr>
                             <th>Brand</th>
@@ -33,10 +33,12 @@
                             <td>{{this.car.model}}</td>
                         </tr>
                         <tr>
-                            <th>Action</th>
-                            <td><span class="center">
-                                <button type="button" class="btn btn-danger" (click)="delete()">Delete</button>
-                            </span></td>
+                            <th>Actions</th>
+                            <td><div class="button-container">
+                                <button type="button" class="btn btn-primary" (click)="goBack()">Back</button>
+                                <button type="button" class="btn btn-warning" (click)="edit()">Edit</button>
+                                <button type="button" class="btn btn-danger" (click)="deleteAndBack()">Delete</button>
+                            </div></td>
                         </tr>
                     </tbody>
                 </table>
