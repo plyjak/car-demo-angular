@@ -1,2 +1,2 @@
-# car-rental-demo-angular
+# car-demo-angular
 Demo app in angular
