@@ -11,7 +11,15 @@ import { Subscription } from 'rxjs';
 })
 
 export class CarsListComponent implements OnInit, OnDestroy{
-  @Input() cars: Car[] = [];
+  //cars: Car[] = [];
+  get cars(): Car[] {
+    return this._listModifiedService.cars;
+  }
+
+  set cars(cars: Car[]) {
+    this._listModifiedService.cars = cars;
+  }
+
 
   private _subscriptions = new Subscription();
 
@@ -24,17 +32,21 @@ export class CarsListComponent implements OnInit, OnDestroy{
   ){}
 
   ngOnInit(): void {
+    //this.cars = this._listModifiedService.cars;
     const carAddedSubscription = this._listModifiedService.carAddedSubscription((car) => {
       this.cars.push(car);
       this.sortTable(this._sortKey);
+      //this._listModifiedService.cars = this.cars;
     });
     const carDeletedSubscription = this._listModifiedService.carDeletedSubscription((id) => {
-      this.cars = this.cars.filter((it) => it.id !== id)
+      //this._listModifiedService.cars = this.cars.filter((it) => it.id !== id)
+      this.cars = this.cars.filter((it) => it.id !== id);
     })
     const carModifiedSubscription = this._listModifiedService.carModifiedSubscription((car) => {
       this.cars = this.cars.filter((it) => it.id !== car.id);
       this.cars.push(car);
       this.sortTable(this._sortKey);
+      //this._listModifiedService.cars = this.cars;
     })
 
     this._subscriptions.add(carAddedSubscription);
@@ -88,6 +100,7 @@ export class CarsListComponent implements OnInit, OnDestroy{
     const cDataGetter = cData.getter;
     const cDataComparator = cData.comparator;
   
+    //this._listModifiedService.cars = this.cars.sort((lhs, rhs) => {
     this.cars = this.cars.sort((lhs, rhs) => {
       const vLhs = cDataGetter(lhs);
       const vRhs = cDataGetter(rhs);

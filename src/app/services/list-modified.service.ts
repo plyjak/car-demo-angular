@@ -13,6 +13,16 @@ export class ListModifiedService {
   private _carModifiedSubject = new Subject<Car>();
   private _carAddedSubject = new Subject<Car>();
 
+  private _cars : Car[] = [];
+
+  get cars(): Car[] {
+    return this._cars;
+  }
+
+  set cars(cars: Car[]) {
+    this._cars = cars;
+  }
+
   notifyCarDeleted(id: number){
     this._carDeletedSubject.next(id);
   }

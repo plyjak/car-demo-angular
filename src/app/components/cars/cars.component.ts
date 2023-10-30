@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, catchError, throwError } from 'rxjs';
 import { Car } from 'src/app/models/Car';
 import { CarsService } from 'src/app/services/cars.service';
+import { ListModifiedService } from 'src/app/services/list-modified.service';
 
 @Component({
   selector: 'app-cars',
@@ -23,14 +24,21 @@ export class CarsComponent implements OnInit, OnDestroy{
 
   isLoading: boolean = true;
   isError: boolean = false;
-  cars: Car[] = [];
+
+  get cars(): Car[] {
+    return this._listModifiedService.cars;
+  }  
+
+  set cars(cars: Car[]) {
+    this._listModifiedService.cars = cars;
+  }
 
   private _subscriptions: Subscription = new Subscription();
 
   constructor(
     private _carsService: CarsService,
-    private _route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private _listModifiedService: ListModifiedService
   ) {}
 
   onFilterClick(){
@@ -38,6 +46,7 @@ export class CarsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
+    //this.cars = this._listModifiedService.cars;
     this.reload();
   }
 
@@ -59,6 +68,7 @@ export class CarsComponent implements OnInit, OnDestroy{
       return throwError(() => err);
     }))
     .subscribe(cars =>{
+      //this._listModifiedService.cars = cars;
       this.cars = cars;
       this.isLoading = false;
       this.isError = false;
