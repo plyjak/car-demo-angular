@@ -1,0 +1,19 @@
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th><button type="button" class="btn btn-link" (click)="sortTable('Registration')">Registration</button></th>
+            <th><button type="button" class="btn btn-link" (click)="sortTable('Brand')">Brand</button></th>
+            <th><button type="button" class="btn btn-link" (click)="sortTable('Model')">Model</button></th>
+            <th class="center">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let c of cars">
+            <td>{{c.registration}}</td>
+            <td>{{c.brand}}</td>
+            <td>{{c.model}}</td>
+            <td><span><button type="button" class="btn btn-info" (click)="openDetails(c.id)">Details</button></span></td>
+        </tr>
+    </tbody>
+</table>

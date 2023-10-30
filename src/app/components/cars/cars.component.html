@@ -1,0 +1,53 @@
+<!--
+    I'm fully aware that some of these inputs would do better if were combo boxes,
+    but since my very simplistic DB model has only one table, I decided I won't
+    complicate this either. If in my DB tables for brands and models it would be
+    better to create endpoints to fetch them and create a combo box like this:
+
+    <select>
+    <input *ngFor="let brand of brands$ | async">brand</input>
+    </select>
+-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <app-cars-string-filter
+            [label]="'registration'"
+            [(value)]="registration"
+            [(isEnabled)]="isRegistrationEnabled"
+            />
+        </div>
+        <div class="col-lg-4">
+            <app-cars-string-filter [label]="'min year of production'" [regexpr]="'^[0-9]*$'" [(value)]="minYop" [(isEnabled)]="isMinYopEnabled"/>
+        </div>
+        <div class="col-lg-4">
+            <app-cars-string-filter [label]="'max year of production'" [regexpr]="'^[0-9]*$'" [(value)]="maxYop" [(isEnabled)]="isMaxYopEnabled"/>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-lg-6">
+            <app-cars-string-filter [label]="'brand'" [(value)]="brand" [(isEnabled)]="isBrandEnabled"/>
+        </div>
+        <div class="col-lg-6">
+            <app-cars-string-filter [label]="'model'" [(value)]="model" [(isEnabled)]="isModelEnabled"/>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-lg-1"><button type="button" class="btn btn-primary" (click)="onFilterClick()">Filter</button></div>
+        <div class="col-lg-2">
+            <h5>Total cars: {{cars.length}}</h5>
+        </div>
+        <div class="col-lg-8"></div>
+        <div class="col-lg-1"><button type="button" class="btn btn-success">Add</button></div>
+        </div>
+        <br>
+        <div class="row">
+        <div class="col-lg-12">
+            <app-loading [isLoading]="isLoading"/>
+            <app-error [isError]="isError"/>
+            <ng-container *ngIf="!isLoading && !isError">
+            <app-cars-list [cars]="cars"/>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="form-group">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" [(ngModel)]="isEnabled" (ngModelChange)="emitIsEnabledChange()">
+        <span class="checkbox-label">{{label}}</span>
+      </label>
+    </div>
+    <input 
+      type="text" 
+      class="form-control" 
+      id="input" 
+      placeholder="{{label}}" 
+      pattern="{{regexpr}}" 
+      required
+      [disabled]="!isEnabled" 
+      [(ngModel)]="value"
+      (ngModelChange)="emitValueChange()"
+      (focusout)="validateInput()"
+    >
+</div>
